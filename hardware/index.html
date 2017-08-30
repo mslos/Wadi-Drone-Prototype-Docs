@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hardware preparation - Wadi Drone Prototype Documentation</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../css/img_border.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Hardware preparation";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Wadi Drone Prototype Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">About (Read First)</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../overview/">Circuits and bills of material</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Hardware preparation</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#hardware-preparation">Hardware Preparation</a></li>
+                
+                    <li><a class="toctree-l4" href="#raspberry-pi">Raspberry Pi</a></li>
+                
+                    <li><a class="toctree-l4" href="#xbee">XBee</a></li>
+                
+                    <li><a class="toctree-l4" href="#sleepy-pi">Sleepy Pi</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../ct_system/">Camera trap part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../drone_system/">UAS part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../camera/">Good camera traps to work with</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_sleepy/">Code in the camera trap</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_rpi/">Code in the drone</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Wadi Drone Prototype Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Hardware preparation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="hardware-preparation">Hardware Preparation</h1>
+<p>In order to begin installing Wadi Drone components you must prepare the hardware and install all the necessary prerequisites.</p>
+<h2 id="raspberry-pi">Raspberry Pi</h2>
+<p>This guide uses Raspberry Pi with Raspbian installed. ‘Noobs’ is the easiest way to install Raspbian on Raspberry Pi. Use the <a href="https://www.raspberrypi.org/help/noobs-setup/">following link</a> for a set up guide on how to install Raspbian using "Noobs". An SD Card of 8GB or more is recommended.</p>
+<p>When the installation process is complete the Raspberry Pi configuration menu appears. It is not necessary to configure anything specific to Wadi Drone at this point. Click Finish and the terminal comes up.</p>
+<p>In the terminal enter <code>startx</code> to open GUI mode of the operating system. From here open Menu &gt; Preferences &gt; WiFi Configure to connect to wifi. Make sure your USB Wifi module for Raspberry Pi is connected to one of the USB ports. Alternatively, use an Ethernet cable to connect to the internet.</p>
+<p>It’s a good idea to ensure that your Raspbian is up to date by opening up an LXTerminal window and executing the following:</p>
+<pre><code class="bash">$ sudo apt-get update
+$ sudo apt-get dist-upgrade
+</code></pre>
+
+<h2 id="xbee">XBee</h2>
+<p>The two Xbees must be pre-configured to communicate with each other. The <a href="http://examples.digi.com/get-started/basic-xbee-802-15-4-chat/">following guide</a> worked well with the Xbees used in the prototype. The Xbees can be configured from any computer.</p>
+<p>Below is a brief summary of the guide.</p>
+<ol>
+<li>Download <a href="https://www.google.com/search?q=CoolTerm+by+Roger+Meier&amp;oq=CoolTerm+by+Roger+Meier&amp;aqs=chrome..69i57.468j0j4&amp;sourceid=chrome&amp;es_sm=119&amp;ie=UTF-8">CoolTerm by Roger Meier</a>. Below is the standard CoolTerm GUI window.</li>
+</ol>
+<p><img alt="CoolTerm GUI" src="../img/coolterm_gui.png" /></p>
+<ol>
+<li>
+<p>After opening CoolTerm click "Options".</p>
+</li>
+<li>
+<p>Choose the serial port that starts with "usbserial". If you cannot see the serial port, click on "Re-Scan Serial Ports." If you’re not sure which serial port to select, look at the list of available ports and then disconnect the <a href="https://www.sparkfun.com/products/11373">XBee Explorer</a> from your computer. Click “Re-Scan Serial Ports” and check which serial port disappeared. Reconnect your <a href="https://www.sparkfun.com/products/11373">XBee Explorer</a>, click “Re-Scan Serial Ports” and choose that port.</p>
+</li>
+<li>
+<p>Be sure Baudrate is set to 9600.</p>
+</li>
+<li>
+<p>Be sure Data Bits is set to 8.</p>
+</li>
+<li>
+<p>Be sure Parity is set to "none".</p>
+</li>
+<li>
+<p>Be sure Stop Bits is set to 1.</p>
+</li>
+<li>
+<p>In the list on the left side of the options window, click “Terminal”.</p>
+</li>
+<li>
+<p>Be sure “Local Echo” is activated. This will allow you to see what you’re typing into the terminal.</p>
+</li>
+<li>
+<p>Click OK to save those settings and close the Options window.</p>
+</li>
+<li>
+<p>Click "Connect" in the toolbar.</p>
+</li>
+<li>
+<p>You should see "Connected" in the status bar at the bottom of the window.</p>
+</li>
+<li>
+<p>Type "+++" to enter command mode. You should see the reply "OK". Below are the settings that we use.</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Command</th>
+<th>Parameter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PAN ID</td>
+<td><code>ATID</code></td>
+<td><code>3001</code> (any address from 0 to FFFE will do)</td>
+</tr>
+<tr>
+<td>MY Address</td>
+<td><code>ATMY</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td>Destination address high</td>
+<td><code>ATDH</code></td>
+<td><code>0</code> (indicates 1 16-bit address)</td>
+</tr>
+<tr>
+<td>Destination address low</td>
+<td><code>ATDL</code></td>
+<td><code>2</code></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>
+<p>Type in each command followed by its parameter and hit enter. If the XBee does not respond, it might have timed out, so just type "+++" and start all over again.</p>
+</li>
+<li>
+<p>You can verify the setting by typing the command without a parameter.</p>
+</li>
+<li>
+<p>Your settings aren’t saved yet! Type <code>ATWR</code> to save the settings.</p>
+</li>
+<li>
+<p>Here’s how the terminal session will look, starting with the “+++” to enter command mode. Note that in the second half of the session, we check what the settings are and then we confirm the changes with <code>ATWR</code>.</p>
+</li>
+</ol>
+<p><img alt="Xbee 1" src="../img/xbee1.png" /></p>
+<ol>
+<li>
+<p>Now you can configure the second XBee. Mark the second Xbee with a "B".</p>
+</li>
+<li>
+<p>Place the XBee into the XBee Explorer and click “Connect” in CoolTerm.</p>
+</li>
+<li>
+<p>Follow the same steps as before to program the second radio. However, ATMY gets 2 and the ATDL gets 1. See the chart below.</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Command</th>
+<th>Parameter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PAN ID</td>
+<td><code>ATID</code></td>
+<td><code>3001</code> (any address from 0 to FFFE will do)</td>
+</tr>
+<tr>
+<td>MY Address</td>
+<td><code>ATMY</code></td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td>Destination address high</td>
+<td><code>ATDH</code></td>
+<td><code>0</code> (indicates 1 16-bit address)</td>
+</tr>
+<tr>
+<td>Destination address low</td>
+<td><code>ATDL</code></td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>
+<p>Remember to type <code>ATWR</code> and press enter to save the settings.</p>
+</li>
+<li>
+<p>Here's a sample of what a terminal looks like after taking these steps.</p>
+</li>
+</ol>
+<p><img alt="Xbee 2" src="../img/xbee2.png" /></p>
+<h2 id="sleepy-pi">Sleepy Pi</h2>
+<p>The transmission device connected to the camera trap requires <a href="http://spellfoundry.com/products/sleepy-pi/">Sleepy Pi</a> for reducing power consumption. Sleepy Pi sits on top of the Raspberry Pi B+ as shown in the photo below.</p>
+<p><img alt="Sleepy Pi" src="../img/connecting-sleepy-pi.JPG" /></p>
+<p>The Sleepy Pi does not need a coin cell battery because we are not using Sleepy Pi's clock in the current version of the system.</p>
+<p><img alt="No coin cell battery required" src="../img/sleepy-pi.JPG" /></p>
+<p>You should put electric tape on the connectors of the Raspberry Pi to avoid short-circuiting Sleepy Pi. In general, Sleepy Pi is liable to short circuits, which can destroy the piece of hardware, so you should exert extra caution when working with the board.</p>
+<p><img alt="Electric tape protects Sleepy Pi from short circuits" src="../img/hardware-prep-electric-tape.JPG" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ct_system/" class="btn btn-neutral float-right" title="Camera trap part of data mule"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../overview/" class="btn btn-neutral" title="Circuits and bills of material"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../overview/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../ct_system/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

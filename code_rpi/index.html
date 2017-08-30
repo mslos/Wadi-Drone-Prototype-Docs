@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Code in the drone - Wadi Drone Prototype Documentation</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../css/img_border.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Code in the drone";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Wadi Drone Prototype Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">About (Read First)</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../overview/">Circuits and bills of material</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../hardware/">Hardware preparation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../ct_system/">Camera trap part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../drone_system/">UAS part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../camera/">Good camera traps to work with</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_sleepy/">Code in the camera trap</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Code in the drone</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#code-on-the-drone">Code on the drone</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Wadi Drone Prototype Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Code in the drone</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="code-on-the-drone">Code on the drone</h1>
+<pre><code>import serial
+import os
+ser = serial.Serial(&quot;/dev/ttyUSB0&quot;, 9600, timeout = 1)
+import time
+
+camera_ip_addr = [&quot;12&quot;,&quot;13&quot;]
+
+class Command ():
+    def __init__(self,ID,command,value):
+        self.id = ID
+        self.command = command
+        self.value = value
+    def makeCommand (self):
+        if self.value == &quot;&quot;:
+            message = &quot;:&quot;+self.id+&quot; &quot;+self.command+&quot;0&quot;+&quot;\r\n&quot; #Added space here
+        else:
+            message = &quot;:&quot;+self.id+&quot; &quot;+self.command+&quot; &quot;+self.value+&quot;\r\n&quot;
+        return message
+    def writeCommand (self):
+        ser.write(self.makeCommand())
+
+class Response():
+    def __init__(self,ID,command,value):
+        self.rawMessage = ser.readlines()
+        self.id = ID
+        self.command = command
+        self.value = value
+    def excludeGarbage(self):
+        notGarbage = []
+        returnMessage = self.rawMessage
+        #print &quot;Raw message is &quot; + str(returnMessage)
+        for i in returnMessage:
+            if &quot;%&quot; in i:
+                message = &quot;&quot;
+                read = False
+                for c in range(len(i)):
+                    if i[c] == &quot;%&quot;:
+                        read = True
+                    if i[c] == &quot;\r&quot; or i[c] == &quot;\n&quot;:
+                        read = False
+                    if read:
+                        message += i[c]
+                notGarbage.append(message)
+        return notGarbage
+#    def checkSum(self):
+#        message = self.excludeGarbage()
+#        for i in message:
+#            if len(i)!=
+    def readMessage(self):
+        messageDictList = []
+        messages = self.excludeGarbage()
+        for i in messages:
+            messageList = i.replace(&quot;%&quot;,&quot;&quot;).split(&quot; &quot;)
+            messageDict = {}
+            messageDict [&quot;ID&quot;] = messageList [0]
+            messageDict [&quot;command&quot;] = messageList [1]
+            messageDict [&quot;value&quot;] = messageList [2]
+            messageDictList.append(messageDict)
+        return messageDictList
+    def checkEcho(self): #Check if the response matches the commmand
+        messageDictList = self.readMessage()
+        print(messageDictList)
+    for i in messageDictList:
+            messageDictList.remove(i)
+            if self.command == i [&quot;command&quot;] and self.value in i[&quot;value&quot;] and self.id == i [&quot;ID&quot;]:
+                return messageDictList
+        return &quot;retry&quot;
+    def realResponse(self): #Dummy, Optimization (?)
+        message = self.checkEcho()
+        if message:
+            return message
+        else:
+            return None
+
+def downloadFiles(ID): #Transfers files from camera trap to drone.
+# Rsync Arguments:
+#   -a       is equivalent to -rlptgoD, preserves everything recursion enabled
+#   -v       verbose
+#   -P       combines --partial (keeps partially transferred files) and --pro-
+#            gress (shows progress of transfer)
+#   --chmod  sets permissions; &quot;a&quot;-for all:user/owner, group owner and all other users;
+#            &quot;rwx&quot; is read, write, execute rights
+#   --update This forces rsync to skip any files for which the destination file already
+#            exists and has a date later than the source file.
+    camera_trap_path = &quot;/media/usbhdd/DCIM/&quot;
+    usb_drive_path = &quot;/media/pi/B037-6D1A1/&quot;+str(ID)
+    rsync_command = &quot;rsync -avP --chmod=a=rwX --update pi@192.168.42.&quot;+camera_ip_addr[int(ID)-1]+&quot;:&quot;+camera_trap_path+&quot; &quot;+usb_drive_path
+    copy_files = sp.call(rsync_command, shell=True)
+    # make_backup = sp.call(&quot;ssh -v pi@192.168.10.22 'python -v /home/pi/Desktop/camerabu.py'&quot;,shell=True)
+
+    return copy_files # if copy_files=0, then download was succesful
+
+def POWR (ID, value):
+    message = Command(ID,&quot;POWR&quot;,value)
+    message.writeCommand()
+    response = Response(ID,&quot;POWR&quot;,value)
+    responseMessage = response.realResponse()
+    if responseMessage == &quot;retry&quot;:
+        ser.readlines()
+        return POWR(ID,value)
+    return responseMessage
+
+def IDEN (ID, value=&quot;0&quot;):
+    message = Command(ID,&quot;IDEN&quot;,value)
+    message.writeCommand()
+    response = Response(ID,&quot;IDEN&quot;,value)
+    responseMessage = response.realResponse()
+    if responseMessage == &quot;retry&quot;:
+        return IDEN(ID)
+    return responseMessage
+
+def RSET (ID, value=&quot;0&quot;):
+    message = Command(ID,&quot;RSET&quot;,value)
+    message.writeCommand()
+    response = Response(ID,&quot;RSET&quot;,value)
+    responseMessage = response.realResponse()
+    if responseMessage == &quot;retry&quot;:
+        return RSET(ID)
+    return responseMessage
+
+def download_sequence(ID_list):
+    counter = 0
+    os.system(&quot;sudo mount /dev/sda1&quot;) #mounts USB flash drive into which photos are saved
+    for ID in ID_list:
+        ID = IDEN(ID)[0][&quot;ID&quot;]
+          POWR (ID,&quot;1&quot;)
+        state = POWR (ID,&quot;?&quot;)
+        while state[0][&quot;value&quot;] != &quot;000001&quot;:
+            state = POWR(ID,&quot;?&quot;)
+
+        successful_download = downloadFiles(ID)
+
+        POWR (ID,&quot;0&quot;)
+          state = POWR (ID,&quot;?&quot;)
+        print(state)
+        while state[0] [&quot;value&quot;] != &quot;000000&quot;:
+            state = POWR (ID,&quot;?&quot;)
+        RSET(ID)
+        counter += 1
+        os.system(&quot;sudo umount /dev/sda1&quot;) #unmounts USB
+
+if __name__ == &quot;__main__&quot;:
+    ID_list = [&quot;001&quot;, &quot;002&quot;]
+    download_sequence(ID_list)
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../code_sleepy/" class="btn btn-neutral" title="Code in the camera trap"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../code_sleepy/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+
+</body>
+</html>

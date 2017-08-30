@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Camera trap part of data mule - Wadi Drone Prototype Documentation</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../css/img_border.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Camera trap part of data mule";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Wadi Drone Prototype Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">About (Read First)</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../overview/">Circuits and bills of material</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../hardware/">Hardware preparation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Camera trap part of data mule</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#about-the-photo-transmission-system">About the photo transmission system</a></li>
+                
+                    <li><a class="toctree-l4" href="#setting-up-raspbian-for-sleepy-pi">Setting Up Raspbian for Sleepy Pi</a></li>
+                
+                    <li><a class="toctree-l4" href="#mounting-camera-trap-on-startup">Mounting Camera Trap on Startup</a></li>
+                
+                    <li><a class="toctree-l4" href="#uploading-arduino-parser-to-sleepypi">Uploading Arduino Parser to SleepyPi</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../drone_system/">UAS part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../camera/">Good camera traps to work with</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_sleepy/">Code in the camera trap</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_rpi/">Code in the drone</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Wadi Drone Prototype Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Camera trap part of data mule</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="about-the-photo-transmission-system">About the photo transmission system</h1>
+<p>The main function of the photo-transmission system in the camera trap is to store camera pictures and allow the photo-transmission system in the drone to SSH into the Raspberry Pi to rsync the photos into the drone.</p>
+<p>Due to the limited power supply the power management arduino shield, Sleepy Pi, is used to turn Raspberry Pi off when not used.</p>
+<h2 id="setting-up-raspbian-for-sleepy-pi">Setting Up Raspbian for Sleepy Pi</h2>
+<p>The summarized guide below follows the tutorial in the following link:
+<a href="http://spellfoundry.com/sleepy-pi/">http://spellfoundry.com/sleepy-pi/</a></p>
+<h3 id="setting-up-the-arduino-ide-on-raspbian">Setting up the Arduino IDE on Raspbian</h3>
+<p>The first step is to load the Arduino environment onto the Raspberry Pi. If you haven’t already done so, it’s a good idea to ensure that your Raspbian is up to date by opening up an LXTerminal window and executing the following:</p>
+<pre><code class="bash">$ sudo apt-get update
+$ sudo apt-get dist-upgrade
+</code></pre>
+
+<p>Note the dist-upgrade will ensure that you have the latest versions of RPi.GPIO which will be required later.
+Now install the Arduino IDE with:</p>
+<pre><code class="bash">$ sudo apt-get install arduino
+</code></pre>
+
+<p>(click Y to install any required dependencies)</p>
+<h3 id="setting-up-the-serial-pins">Setting up the Serial Pins</h3>
+<p>The Arduino processor on the Sleepy Pi can be programmed directly from the Raspberry Pi using the serial GPIO lines on the RPi and another GPIO line to reset the the Arduino to allow automatic code upload. These pins are:</p>
+<ul>
+<li>GPIO 14: TXD</li>
+<li>GPIO 15: RXD</li>
+<li>GPIO 22: Reset (see next section)</li>
+</ul>
+<p>By default Raspbian has exclusive access to the serial pins to output status, debug data, and log in.</p>
+<h4 id="1-disable-serial-login">1. Disable Serial login</h4>
+<p>Raspbian allows you to login using the serial port. To use the Sleepy Pi we need to disable this. To do this, we need to edit /etc/inittab. In an LXTerminal window type:</p>
+<pre><code class="bash">$ sudo leafpad /etc/inittab
+</code></pre>
+
+<p>Scroll down the bottom and you will find the lines:</p>
+<pre><code class="bash">#Spawn a getty on Raspberry Pi Serial line
+T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+</code></pre>
+
+<p>You need to comment the last line out (i.e. disabling it) with a “#” and save it, so that it results in:</p>
+<pre><code class="bash">#Spawn a getty on Raspberry Pi Serial line
+#T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+</code></pre>
+
+<h4 id="2-disable-boot-info">2. Disable Boot Info</h4>
+<p>When Raspbian boots up it outputs boot information to the serial port and hence streams it to the Sleepy Pi (which is not particularly interested in it). To disable this we need to edit the
+<code>/boot/cmdline.txt</code> in LXTerminal:</p>
+<pre><code class="bash">$ sudo leafpad /boot/cmdline.txt
+</code></pre>
+
+<p>It will look something like:</p>
+<pre><code class="bash">dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200
+console=tty1 root=/dev/mmcblk0p6 rootfstype=ext4 elevator=deadline
+rootwait
+</code></pre>
+
+<p>Delete the <code>console=ttyAMA0,115200 kgdboc=ttyAMA0,115200</code> part so that you are left with:</p>
+<pre><code class="bash">dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p6 rootfstype=ext4
+elevator=deadline rootwait
+</code></pre>
+
+<p>This is the file I use: (Should be in the download folder)
+<a href="">Link to the full file</a></p>
+<h4 id="3-link-the-serial-port-to-the-arduino-ide">3. Link the Serial port to the Arduino IDE</h4>
+<p>The Arduino IDE wants to use the /dev/ttyS0 serial port, but we need yo use the /dev/ttyAMA0 which is linked to the GPIO. In order to do this we need to create a permanent link that maps AMA0 to S0. To this we need to create a small file. We can do this in LXTerminal by the following sequence:</p>
+<pre><code class="bash">$ sudo leafpad
+</code></pre>
+
+<p>In the new file that it creates type the following:</p>
+<pre><code class="bash">KERNEL==&quot;ttyAMA0&quot;, SYMLINK+=&quot;ttyS0&quot;,GROUP=&quot;dialout&quot;,MODE:=0666
+KERNEL==&quot;ttyACM0&quot;, SYMLINK+=&quot;ttyS1&quot;,GROUP=&quot;dialout&quot;,MODE:=0666
+</code></pre>
+
+<p>Save this file as a new file called <code>80-sleepypi.rules</code> to: <code>/etc/udev/rules.d/</code></p>
+<p>This is the one I use: (Should be in the download folder)
+<a href="">Link to the full file</a></p>
+<h3 id="setting-up-the-reset-dtr-pin">Setting up the Reset (DTR) pin</h3>
+<p>The Sleepy Pi Arduino processor reset line in connected to GPIO 22. To automatically upload code from the Arduino IDE we need to pulse this line low to reset the Arduino and enter bootload mode.</p>
+<p>On a normal Arduino system connected to a computer via a USB / serial cable the reset line is connected to the DTR line. To replicate this behavior on the Raspberry Pi we need to hack the AVRDude programming software. Dean Mao has detailed a great hack for this. He’s produced a modified version of Avrdude (avrdude-autoreset) and written a piece of python code (autoreset) that runs in the background and pulses the GPIO line when required.</p>
+<p>Use the following from the command lines to download and unzip :</p>
+<pre><code class="bash">wget https://github.com/SpellFoundry/avrdude-rpi/archive/master.zip
+sudo unzip master.zip
+</code></pre>
+
+<p>Next, copy the files to the appropriate places from a LXTerminal window using the following commands:</p>
+<pre><code class="bash">$ cd ./avrdude-rpi-master/
+$ sudo cp autoreset /usr/bin
+$ sudo cp avrdude-autoreset /usr/bin
+$ sudo mv /usr/bin/avrdude /usr/bin/avrdude-original
+</code></pre>
+
+<p>This renames your original avrdude, so that you have a backup and can replace it with the new one.</p>
+<pre><code class="bash">$ sudo ln -s /usr/bin/avrdude-autoreset /usr/bin/avrdude
+</code></pre>
+
+<p>Link the new avrdude-autoreset to avrdude so that when something calls for avrdude, the new version runs instead.</p>
+<h3 id="adding-the-sleepy-pi-to-the-arduino-environment">Adding the Sleepy Pi to the Arduino environment</h3>
+<p>To enable the Sleepy Pi to be selected from the IDE you need to add a folder and file to your sketchbook. If it is a fresh install and you haven’t yet run the Arduino environment you’ll need to create a sketchbook folder (skip this step if it already exists).</p>
+<p>In LXTerminal type:</p>
+<pre><code class="bash">$ mkdir /home/pi/sketchbook
+$ mkdir /home/pi/sketchbook/hardware
+$ mkdir /home/pi/sketchbook/hardware/Sleepy_pi
+</code></pre>
+
+<p>to create folders “hardware” and “sleepy pi” in your Arduino sketchbook.
+Download and copy the boards.txt file to the Sleepy Pi folder.
+<a href="">Download the boards.txt file</a></p>
+<p>This file should look like this:</p>
+<pre><code class="bash">sleepypi.name=Sleepy Pi
+sleepypi.upload.protocol=arduino
+sleepypi.upload.maximum_size=30720
+sleepypi.upload.speed=57600
+sleepypi.bootloader.low_fuses=0xFF
+sleepypi.bootloader.high_fuses=0xDA
+sleepypi.bootloader.extended_fuses=0x05
+sleepypi.bootloader.path=arduino:atmega
+sleepypi.bootloader.file=ATmegaBOOT_168_atmega328_pro_8MHz.hex
+sleepypi.bootloader.unlock_bits=0x3F
+sleepypi.bootloader.lock_bits=0x0F
+sleepypi.build.mcu=atmega328p
+sleepypi.build.f_cpu=8000000L
+sleepypi.build.core=arduino:arduino
+sleepypi.build.variant=arduino:standard
+</code></pre>
+
+<p>And finally reboot your Raspberry Pi to complete and load all our changes. You can use:</p>
+<pre><code class="bash">$ sudo reboot
+</code></pre>
+
+<h3 id="getting-the-sleepy-pi-to-shutdown-the-raspberry-pi">Getting the Sleepy Pi to Shutdown the Raspberry Pi</h3>
+<p>The Sleepy Pi has the ability to co-ordinate a shutdown of the Raspberry Pi via two GPIO handshake lines:</p>
+<ul>
+<li>GPIO 24: Command the RPi to shutdown</li>
+<li>GPIO 25: Raspberry Pi is running</li>
+</ul>
+<p>Software must be running on both the Raspberry Pi and also the Sleepy Pi that react to these signals. From the Sleepy Pi’s perspective, the shutdown sequence is as follows:</p>
+<ol>
+<li>Set GPIO 24 high to signal that we are going to shutdown</li>
+<li>Monitor GPIO 25, wait for it to go low indicating that the Raspberry Pi software has stopped running</li>
+<li>Cut the power to the Raspberry Pi</li>
+</ol>
+<p>From the Raspberry Pi’s perspective, the shutdown sequence is as follows:</p>
+<ol>
+<li>Set GPIO 25 to indicate that we are running</li>
+<li>Monitor GPIO 24 for a command to shutdown</li>
+<li>When we receive a command to shutdown issue a <code>sudo shutdown -h now</code> command</li>
+</ol>
+<p>To properly handshake, the Raspberry Pi must install a script that runs at boot and continues in the background setting and monitoring the handshake lines.</p>
+<p>Copy the following script to <code>/home/pi/bin/button/</code></p>
+<p><a href="">Link to donwload the file</a></p>
+<p>It is possible that the directory doesn't exist. Make it with:</p>
+<pre><code>$ mkdir /home/pi/bin
+$ mkdir /home/pi/bin/button
+</code></pre>
+
+<p>The shutdowncheck.py script looks like this:</p>
+<pre><code class="python">#!/usr/bin/python
+
+import RPi.GPIO as GPIO
+import os, time
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(24, GPIO.IN)
+GPIO.setup(25, GPIO.OUT)
+GPIO.output(25, GPIO.HIGH)
+print (&quot;[Info] Telling Sleepy Pi we are running pin 25&quot;)
+
+while True:
+   if (GPIO.input(24)):
+      print (&quot;Sleepy Pi requesting shutdown on pin 24&quot;)
+      os.system(&quot;sudo shutdown -h now&quot;)
+      break
+   time.sleep(0.5)
+</code></pre>
+
+<p>To run this script at startup, we must edit the <code>/etc/rc.local</code></p>
+<p>In LXTerminal:</p>
+<pre><code class="bash">$ sudo leafpad /etc/rc.local
+</code></pre>
+
+<p>and insert the following line just before the final exit 0 and save changes:</p>
+<pre><code class="bash">python /home/pi/bin/button/shutdowncheck.py &amp;
+</code></pre>
+
+<p>DO NOT forget the “&amp;” which allows the script to run in the background!
+(This script  is based on <a href="https://www.google.com/url?q=http://www.3cc.org/blog/2013/01/raspberry-pi-shutdown-switch-safely-turning-off-the-pi/&amp;sa=D&amp;ust=1453108156876000&amp;usg=AFQjCNGaPrUFGD6qUABl9c-BZq0ngyOgdg">this</a> one)</p>
+<p>NOTE: On a fresh PI install you will need to set the permissions on /etc/rc/local so that it can execute at startup. To do this execute the following command from a terminal window:</p>
+<pre><code class="bash">sudo chmod u+x /etc/rc.local
+</code></pre>
+
+<h3 id="installing-sleepy-pi-and-related-libraries">Installing Sleepy Pi and related libraries.</h3>
+<p>Move the libraries from the <a href="">download</a> and put them in your <code>/home/pi/sketchbook</code> folder in the Raspberry Pi.</p>
+<p>Make sure that the Sketchbook location in <code>File &gt; Preferences</code> is set to <code>/home/pi/sketchbook</code></p>
+<h2 id="mounting-camera-trap-on-startup">Mounting Camera Trap on Startup</h2>
+<p>IMPORTANT: <a href="http://raspberrywebserver.com/serveradmin/connect-your-raspberry-pi-to-a-USB-hard-disk.html">This link</a> explains the entirety of the following procedure.</p>
+<h4 id="solving-the-problem-with-mounting-sd-card">Solving the problem with mounting SD card</h4>
+<p>To be able to access the SD card on the camera trap form the Raspberry Pi special steps are required. If you don’t start GUI, the SD card does not get mounted automatically and it does not appear in the directories</p>
+<p>To solve the problem:</p>
+<ol>
+<li>connect the usb device - sd card or hdd</li>
+<li>use command <code>sudo fdisk -l</code> to list the available storage drives</li>
+<li>camera trap SD card should be under the path <code>/dev/sda1</code></li>
+<li>if you accessed the camera trap from GUI before, the SD card should already have a folder created for it in <code>/media</code> probably a folder name with number in it such as <code>/media/6639-3235</code></li>
+<li>to create folder for the storage device <code>sudo mkdir /media/usbhdd</code></li>
+<li>permission problem may occur during transfer - you must make user pi the owner of the folder to avoid these issues: <code>sudo chown pi:pi /media/usbhdd</code></li>
+<li>finally to mount the disk: <code>sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbhdd</code></li>
+<li>finally unmount: <code>sudo umount /media/usbhdd</code></li>
+</ol>
+<h4 id="mount-automatically-on-startup">Mount automatically on startup:</h4>
+<ol>
+<li>edit the file system table: <code>sudo nano /etc/fstab</code>. You need to use sudo because the fstab file is owned by root.</li>
+<li>You should see something like this:</li>
+</ol>
+<pre><code class="bash">proc            /proc           proc    defaults          0       0
+/dev/mmcblk0p1  /boot           vfat    defaults          0       2
+/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
+</code></pre>
+
+<ol>
+<li>Add the following line, and save the file.</li>
+</ol>
+<pre><code class="bash">/dev/sda1       /media/usbhdd   vfat    uid=pi,gid=pi     0       0
+</code></pre>
+
+<ol>
+<li>Reboot your Pi and you should be able to access your USB drive via <code>/media/usbhdd</code>.</li>
+</ol>
+<h2 id="uploading-arduino-parser-to-sleepypi">Uploading Arduino Parser to SleepyPi</h2>
+<p>Arduino Parser is our name for the software that runs on the Sleepy Pi. Download the Arduino Parser <a href="https://www.google.com/url?q=https://drive.google.com/open?id%3D0B2vRCLE5t7hDNnFNSVVYNkJmTFU%26authuser%3D0&amp;sa=D&amp;ust=1453108156890000&amp;usg=AFQjCNHo_tv1bS1exxfMFC0xgme4vw8rEA">from this link</a> and upload it to SleepyPi. This can be done either through Raspberry Pi or through any computer.</p>
+<p>The Arduino IDE can be found on the Main GUI menu in the Electronics section.</p>
+<p><img alt="Arduino Dialog" src="../img/ct_system_arduino_dialog.png" /></p>
+<p>Once loaded the Sleepy Pi should be selected as a target from the Tools menu.</p>
+<p><img alt="Board Settings" src="../img/ct_system_arduino_board_setting.png" /></p>
+<p>To test that you can program the Arduino correctly the “Blink” sketch is always a favourite. It can be found from the <code>File &gt; Examples &gt; 01.Basics &gt; Blink menu</code>.</p>
+<p><img alt="Test with Arduino Blink Example" src="../img/ct_system_arduino_blink_example.png" /></p>
+<p>Press the “Upload” button and the sketch will be compiled and uploaded. You should see a message from the “autoreset” displayed in the bottom status area.</p>
+<p><img alt="Autoreset Message" src="../img/ct_system_sleepypi-autoreset.png" /></p>
+<p>If the sketch is successfully loaded, then the amber LED will begin flashing.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../drone_system/" class="btn btn-neutral float-right" title="UAS part of data mule"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../hardware/" class="btn btn-neutral" title="Hardware preparation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../hardware/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../drone_system/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

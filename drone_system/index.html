@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>UAS part of data mule - Wadi Drone Prototype Documentation</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../css/img_border.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "UAS part of data mule";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Wadi Drone Prototype Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">About (Read First)</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../overview/">Circuits and bills of material</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../hardware/">Hardware preparation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../ct_system/">Camera trap part of data mule</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">UAS part of data mule</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#drone-photo-transmission-system">Drone Photo-Transmission System</a></li>
+                
+                    <li><a class="toctree-l4" href="#setting-up-passwordless-wifi-hotspot">Setting Up Passwordless Wifi Hotspot</a></li>
+                
+                    <li><a class="toctree-l4" href="#configure-access-point">Configure Access Point</a></li>
+                
+                    <li><a class="toctree-l4" href="#leasing-static-ip-address-to-camera-trap-photo-transmission-system">Leasing static IP address to camera-trap photo transmission system</a></li>
+                
+                    <li><a class="toctree-l4" href="#establishing-ssh-connection-with-camera-trap-without-password">Establishing SSH connection with Camera Trap without Password</a></li>
+                
+                    <li><a class="toctree-l4" href="#making-raspberry-pi-execute-a-script-on-startup">Making Raspberry Pi execute a script on startup</a></li>
+                
+                    <li><a class="toctree-l4" href="#run-a-python-script-after-login">Run a Python Script after login</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../camera/">Good camera traps to work with</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_sleepy/">Code in the camera trap</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../code_rpi/">Code in the drone</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Wadi Drone Prototype Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>UAS part of data mule</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="drone-photo-transmission-system">Drone Photo-Transmission System</h1>
+<p>The main purpose of this system is to behave as a wireless hotspot and SSH
+into the photo-transmission system in the camera trap and retrieve the photos using RSYNC.</p>
+<h2 id="setting-up-passwordless-wifi-hotspot">Setting Up Passwordless Wifi Hotspot</h2>
+<p>This section of the guide follows mostly through <a href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software">this tutorial by adafruit</a>.</p>
+<p>First of all, install the software onto the Pi that will act as the 'hostap' (host access point)</p>
+<p>To do so <strong>you need internet access</strong> so make sure you either have ethernet of wifi connected.</p>
+<p><code>sudo apt-get update</code></p>
+<p><code>sudo apt-get install hostapd isc-dhcp-server</code></p>
+<p>(You may need to <code>sudo apt-get update</code> if the Pi can't seem to get to the apt-get repositories)
+<img alt="Hostapd Installation Screenshot" src="../img/hostapt_installation_scrshot.gif" />
+<em>(text above shows udhcpd but that doesnt work as well as isc-dhcp-server, still, the output should look similar)</em></p>
+<h2 id="configure-access-point">Configure Access Point</h2>
+<p>Now we can configure the access point details. We will set up a password-protected network so only people with the password can connect.</p>
+<p>Create a new file by running</p>
+<p><code>sudo nano /etc/hostapd/hostapd.conf</code></p>
+<p>Paste the following in, you can change the text after ssid= to another name, that will be the network broadcast name. The password can be changed with the text after <strong>wpa_passphrase=</strong>. Make sure to type <strong>L</strong> in rt<strong>l</strong>871xdrv rather than a <strong>1</strong>.</p>
+<pre><code>interface=wlan0
+driver=rtl871xdrv
+ssid=WadiDrone
+hw_mode=g
+channel=6
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+</code></pre>
+
+<p>If you are not using the Adafruit wifi adapters, you may have to change the <strong>driver=rtl871xdrv</strong> to say <strong>driver=nl80211</strong> or something, we don't have tutorial support for that tho, YMMV!</p>
+<p><img alt="Configure Access Point Screenshot1" src="../img/configure_access_point_scrshot.gif" />
+Save as usual. Make sure each line has no extra spaces or tabs at the end or beginning - this file is pretty picky!</p>
+<p>Now we will tell the Pi where to find this configuration file. Run <code>sudo nano /etc/default/hostapd</code></p>
+<p>Find the line <strong>#DAEMON_CONF=""</strong> and edit it so it says <strong>DAEMON_CONF="/etc/hostapd/hostapd.conf"</strong>
+Don't forget to remove the <strong>#</strong> in front to activate it!</p>
+<p>Then save the file</p>
+<p><img alt="Configure Access Point Screenshot2" src="../img/configure_access_point_scrshot1.gif" /></p>
+<h3 id="update-hostapd">Update hostapd</h3>
+<p>Before we can run the access point software, we have to update it to a version that supports the WiFi adapter.
+First get the new version by typing in</p>
+<p><code>wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip</code></p>
+<p>then</p>
+<p><code>unzip adafruit_hostapd_14128.zip</code></p>
+<p>to uncompress it. Move the old version out of the way with</p>
+<p><code>sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG</code></p>
+<p>And move the new version back with</p>
+<p><code>sudo mv hostapd /usr/sbin</code></p>
+<p>set it up so its valid to run with</p>
+<p><code>sudo chmod 755 /usr/sbin/hostapd</code></p>
+<p><img alt="Update Hostapd Screenshot" src="../img/update_hostapd_scrshot.gif" /></p>
+<h3 id="setup-dhcp-server">Setup DHCP Server</h3>
+<p>Next we will edit <code>/etc/dhcp/dhcpd.conf</code>, a file that sets up our DHCP server - this allows wifi connections to automatically get IP addresses, DNS, etc.</p>
+<p>Run this command to edit the file</p>
+<p><code>sudo nano /etc/dhcp/dhcpd.conf</code></p>
+<p>Find the lines that say</p>
+<pre><code>option domain-name &quot;example.org&quot;;
+option domain-name-servers ns1.example.org, ns2.example.org;
+</code></pre>
+
+<p>and change them to add a <strong>#</strong> in the beginning so they say</p>
+<pre><code>#option domain-name &quot;example.org&quot;;
+#option domain-name-servers ns1.example.org, ns2.example.org;
+</code></pre>
+
+<p>Find the lines that say</p>
+<pre><code># If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+#authoritative;
+</code></pre>
+
+<p>and remove the <strong>#</strong> so it says</p>
+<pre><code># If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+</code></pre>
+
+<p><img alt="Setup DHCP Server Screenshot" src="../img/setup_dhcp_server_scrshot.gif" /></p>
+<p>Then scroll down to the bottom and add the following lines.</p>
+<pre><code>subnet 192.168.10.0 netmask 255.255.255.0 {
+        range 192.168.10.10 192.168.10.20;
+        option broadcast-address 192.168.10.255;
+        option routers 192.168.10.1;
+        default-lease-time 600;
+        max-lease-time 7200;
+        option domain-name &quot;local&quot;;
+        option domain-name-servers 8.8.8.8, 8.8.4.4;
+}
+</code></pre>
+
+<p>Note, that the screenshot below only illustrates the code, but you should type the code above.</p>
+<p><img alt="Setup DHCP Server Screenshot 1" src="../img/setup_dhco_server_srcshot1.gif" /></p>
+<p>Save the file by typing in <strong>Control-X</strong> then <strong>Y</strong> then <strong>return</strong></p>
+<p>Run</p>
+<p><code>sudo nano /etc/default/isc-dhcp-server</code></p>
+<p>and scroll down to <strong>INTERFACES=""</strong> and update it to say <strong>INTERFACES="wlan0"</strong></p>
+<p><img alt="Setup DHCP Server Screenshot 2" src="../img/setup_dhcp_server_scrshot2.gif" /></p>
+<p>close and save the file</p>
+<h3 id="setup-wlan0-for-static-ip">Setup Wlan0 For Static IP</h3>
+<p>If you happen to have wlan0 active because you set it up, run <code>sudo ifdown wlan0</code>
+There's no harm in running it if you're not sure</p>
+<p><img alt="Setup Wlan0 Screenshot" src="../img/setup_wlan0_scrshot.gif" /></p>
+<p>Next we will set up the <strong>wlan0</strong> connection to be static and incoming.
+run <code>sudo nano /etc/network/interfaces</code> to edit the file</p>
+<p>Find the line <code>auto wlan0</code> and add a <code>#</code> in front of the line,
+and in front of every line afterwards. If you don't have that line,
+just make sure it looks like the screenshot below in the end!
+Basically just remove any old wlan0 configuration settings, we'll
+be changing them up</p>
+<p>Depending on your existing setup/distribution there might be
+more or less text and it may vary a little bit
+Add the lines</p>
+<pre><code>iface wlan0 inet static
+address 192.168.10.1
+netmask 255.255.255.0
+</code></pre>
+
+<p>After allow <code>hotplug wlan0</code> - see below for an example of what it should
+look like. (ignore our hyphen in allow-hotplug tho, its a typo!) Any other
+lines afterwards should have a <code>#</code> in front to disable them.</p>
+<p><img alt="Setup Wlan0 Screenshot 1" src="../img/setup_wlan0_scrshot1.gif" /></p>
+<p>Save the file <strong>(Control-X Y return)</strong>
+Assign a static IP address to the wifi adapter by running</p>
+<p><code>sudo ifconfig wlan0 192.168.10.1</code></p>
+<p><img alt="Setup Wlan0 Screenshot 2" src="../img/setup_wlan0_scrshot2.gif" /></p>
+<p>First test!
+Finally we can test the access point host! Run</p>
+<p><code>sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf</code></p>
+<p>To manually run <strong>hostapd</strong> with our configuration file.
+You should see it set up and use <strong>wlan0</strong> then you can check with another
+wifi computer that you see your SSID show up. If so, you have successfully
+ set up the access point.</p>
+<p><img alt="Setup Wlan0 Screenshot 3" src="../img/setup_wlan0_scrshot3.gif" /></p>
+<p><img alt="Setup Wlan0 Screenshot 4" src="../img/setup_wlan0_scrshot4.png" /></p>
+<p>You can try connecting and disconnecting from the WadiDrone with
+the password you set before, debug text will display on the Pi console
+ but you won't be able to connect through to the Ethernet connection yet.
+Cancel the test by typing <strong>Control-C</strong> in the Pi console to get
+back to the Pi command line.</p>
+<h3 id="finishing-up">Finishing up!</h3>
+<p>OK now that we know it works, time to set it up as a 'daemon' - a program that will start when the Pi boots.
+Run the following commands</p>
+<pre><code>sudo service hostapd start
+sudo service isc-dhcp-server start
+</code></pre>
+
+<p>you can always check the status of the host AP server and the DHCP server with</p>
+<pre><code>sudo service hostapd status
+sudo service isc-dhcp-server status
+</code></pre>
+
+<p>To start the daemon services. Verify that they both start successfully
+(no 'failure' or 'errors')</p>
+<p>Then to make it so it runs every time on boot</p>
+<pre><code>sudo update-rc.d hostapd enable
+sudo update-rc.d isc-dhcp-server enable
+</code></pre>
+
+<p><img alt="Finishing Up Screenshot" src="../img/finishing_up_scrshot.gif" /></p>
+<h2 id="leasing-static-ip-address-to-camera-trap-photo-transmission-system">Leasing static IP address to camera-trap photo transmission system</h2>
+<p>In this part of the tutorial, you will have to work with both the camera trap and the drone system. For each camera trap that you want to serve with the drone, you will have to alter the config file.</p>
+<h3 id="in-the-camera-trap">In the camera trap:</h3>
+<p>In the raspberry at the camera trap modify the</p>
+<p><code>/etc/network/interfaces</code></p>
+<p>so it looks like the following</p>
+<pre><code>auto lo
+iface lo inet loopback
+iface eth0 inet dhcp
+auto wlan0
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+</code></pre>
+
+<p>comment out the rest of the code</p>
+<p>Make</p>
+<p><code>/etc/wpa_supplicant/wpa_supplicant.conf</code></p>
+<p>look like the following</p>
+<pre><code>ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+        ssid=&quot;WadiDrone&quot;
+        key_mgmt=NONE
+        auth_alg=OPEN
+        id_str=&quot;WadiDrone&quot;
+}
+</code></pre>
+
+<h3 id="in-the-drone">In the drone:</h3>
+<p>For each camera that you want to add to the system, you will have to add a static address to the record of the drone. Here we revisit the dhcpd.conf file from the previous part of the tutorial. This tutorial assumed you already setup the Wi-Fi hotspot using previous tutorial. Type the following command in the terminal:</p>
+<p><code>sudo nano /etc/dhcp/dhcpd.conf</code></p>
+<p>Add the following lines at the end of the file. The MAC address is individual to each Raspberry Pi and it can be found by typing <code>ifconfig</code> into the Terminal of the camera trap Raspberry Pi. The IP address also has to be unique, but you can assign it arbitrarily as long as it does not conflict with any of the other IP addresses. For setting the IP address, you must change the number after the last dot.</p>
+<pre><code>host camera1 { #add the name of the camera
+        hardware ethernet 80:1f:02:ef:e6:f2; #add the MAC address of the raspberry pi of camera
+        fixed-address 192.168.10.21; #the static ip you want to assign to the trap
+}
+</code></pre>
+
+<p><em>Important:</em> If the static leasing of the IP address does not work, restart the drone first and then restart the camera trap.</p>
+<h2 id="establishing-ssh-connection-with-camera-trap-without-password">Establishing SSH connection with Camera Trap without Password</h2>
+<p>Because photos are transmitted using <a href="http://linuxcommand.org/man_pages/rsync1.html">RSync</a>, which uses SSH secure connection for transmission, you need to add drones's public key into the camera trap transmission system. Our tutorial draws liberally on material from this  <a href="http://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md">tutorial</a>.</p>
+<p>It is possible to configure your Pi to allow your computer to access it without
+providing a password each time you try to connect. To do this you need to
+generate an SSH key.</p>
+<h3 id="potential-problem-you-may-skip">Potential problem (you may skip)</h3>
+<p>Depending on how your computer is configured and whether you tried to SSH into the Raspberry Pi before, your will see the following message</p>
+<p><img alt="SSH Error Message" src="../img/SSH-warning.png" /></p>
+<p>In order to remove the message you will need to call the following code in your terminal to remove the offending SSH key from your records. The IP address refers to the address of the drone hotspot.</p>
+<pre><code>ssh-keygen -R 192.168.10.1
+</code></pre>
+
+<h3 id="check-for-the-existing-keys">Check for the existing keys</h3>
+<p>First, check whether there are already keys on the drone Raspberry Pi:</p>
+<p><code>ls ~/.ssh</code></p>
+<p>If you see files named <code>id_rsa.pub</code> or <code>id_dsa.pub</code> you have keys set up
+already, so you can skip the generating keys step (or delete these files
+with <code>rm id*</code> and make new keys).</p>
+<h3 id="generate-new-ssh-key-for-the-drone">Generate new SSH key for the drone</h3>
+<p>To generate new SSH keys enter the following command (Choose a sensible
+hostname such as <strong><YOURNANME>@<YOURDEVICE></strong> where we have used <strong>drone@pi</strong>):</p>
+<p><code>ssh-keygen -t rsa -C drone@pi</code></p>
+<p>Upon entering this command, you'll be asked where to save the key.
+We suggest you save it in the default location (<code>/home/pi/.ssh/id_rsa</code>)
+by just hitting Enter.</p>
+<p>You'll also be asked to enter a passphrase. This is extra security which
+will make the key unusable without your passphrase, so if someone else copied
+your key, they could not impersonate you to gain access. If you choose to use a
+ passphrase, type it here and press Enter, then type it again when prompted. Le
+ ave empty for no passphrase.</p>
+<p>Now you should see the files <code>id_rsa</code> and <code>id_rsa.pub</code> in your <code>.sshdirectory</code>
+ in your home folder:</p>
+<pre><code>ls ~/.ssh
+authorized_keys  id_rsa  id_rsa.pub  known_hosts
+</code></pre>
+
+<p>The <code>id_rsa</code> file is your private key. Keep this on your computer.
+The <code>id_rsa.pub</code> file is your public key. This is what you put on
+machines you want to connect to. When the machine you try to connect to
+ matches up your public and private key, it will allow you to connect.</p>
+<p>Take a look at your public key to see what it looks like:</p>
+<p><code>cat ~/.ssh/id_rsa.pub</code></p>
+<p>It should be in the form:</p>
+<p><strong>ssh-rsa <REALLY LONG STRING OF RANDOM CHARACTERS> drone@pi</strong></p>
+<h3 id="copy-your-public-key-into-camera-trap">Copy your public key into camera trap</h3>
+<p>To copy your public key to CAMERA TRAP, use the following command to append
+the public key to your authorized_keys file on the CAMERA TRAP, sending it
+over SSH:</p>
+<pre><code>cat ~/.ssh/id_rsa.pub | ssh &lt;USERNAME&gt;@&lt;IP-ADDRESS&gt; 'cat &gt;&gt; .ssh/authorized_keys'
+</code></pre>
+
+<p>Note that this time you will have to authenticate with your password.</p>
+<p>Now try ssh <strong><USER>@<IP-ADDRESS></strong> and you should connect without a
+password prompt.
+If you see a message <strong>"Agent admitted failure to sign using the key."</strong>
+ then add your RSA or DSA identities to the authentication agent, ssh-agent the execute the following command:</p>
+<p><code>ssh-add</code></p>
+<p>If this did not work, delete your keys with <code>rm ~/.ssh/id*</code> and follow the
+ instructions again.</p>
+<p>You can also send files over SSH using the scp command (secure copy). See
+the SCP guide for more information.</p>
+<h2 id="making-raspberry-pi-execute-a-script-on-startup">Making Raspberry Pi execute a script on startup</h2>
+<p>A crucial part of the system is a Python script that runs on the startup and executes in a loop. When a camera trap transmission station becomes in range, the Python script downloads photos from the camera trap. In order to run the script, you must follow these steps:</p>
+<p>Based on this <a href="http://www.opentechguides.com/how-to/article/raspberry-pi/5/raspberry-pi-auto-start.html">tutorial</a></p>
+<h3 id="auto-login">Auto Login</h3>
+<p>How to automatically login to Raspberry Pi console as pi user.</p>
+<p>Step 1: Open a terminal session and edit inittab file.</p>
+<p><code>sudo nano /etc/inittab</code></p>
+<p>Step 2: Disable the getty program.</p>
+<p>Navigate to the following line in inittab</p>
+<p><code>1:2345:respawn:/sbin/getty 38400 tty1</code></p>
+<p>And add a <code>#</code> at the beginning of the line to comment it out</p>
+<p><code>#1:2345:respawn:/sbin/getty 38400 tty1</code></p>
+<p>Step 3: Add login program to inittab.</p>
+<p>Add the following line just below the commented line</p>
+<p><code>1:2345:respawn:/bin/login -f pi tty1 &lt;/dev/tty1 &gt;/dev/tty1 2&gt;&amp;1</code></p>
+<p>This will run the login program with pi user and without any authentication</p>
+<p>Step 4: Save and Exit.</p>
+<p>Press <strong>Ctrl+X</strong> to exit nano editor followed by <strong>Y</strong> to save the
+file and then press <strong>Enter</strong> to confirm the filename.</p>
+<p>Reboot the pi and it will boot straight on to the shell prompt
+<code>pi@raspberrypi</code> without prompting you to enter username or password.
+But this isn't enough; you need your Pi to automatically run some
+command or a script. which is explained in the next section.</p>
+<h2 id="run-a-python-script-after-login">Run a Python Script after login</h2>
+<p>It is desirable to run the Python script automatically after login, so that drone starts looking for camera traps any time the system is on. The name of the file that runs in the Raspberrry Pi is currently "<a href="https://drive.google.com/file/d/0B2vRCLE5t7hDNmJxSGJJZ21IeXc/view?usp=sharing">DroneControlClassesCompetition.py</a>." Download this file onto the desktop of the drone Raspberry Pi, where you will be able to edit it in the future.</p>
+<p>Step 1: Open a terminal session and edit the file /etc/profile</p>
+<p><code>sudo nano /etc/profile</code></p>
+<p>Step 2: Add the following line to the end of the file</p>
+<p><code>python /home/pi/Desktop/DroneControlClassesCompetition.py &amp;</code></p>
+<p>replace the script name and path with correct name and path of your start-up script.</p>
+<p>Step 3: Save and Exit</p>
+<p>Press <strong>Ctrl+X</strong> to exit nano editor followed by <strong>Y</strong> to save the file.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../camera/" class="btn btn-neutral float-right" title="Good camera traps to work with"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../ct_system/" class="btn btn-neutral" title="Camera trap part of data mule"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../ct_system/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../camera/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
