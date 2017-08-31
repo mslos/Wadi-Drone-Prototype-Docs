@@ -1,4 +1,4 @@
-# This documentation is written in mkdocs. It is accessible at wadidrone.github.io/Wadi-Drone-Prototype
+This documentation is written in mkdocs. It is accessible at wadidrone.github.io/Wadi-Drone-Prototype
 
 # Wadi Drone Prototype Docs
 
@@ -13,7 +13,7 @@ Wadi Drone transmission system can work with any platform that supports Pixhawk 
 ![Wadi Drone prototype diagram](/img/flying_drone.png)
 
 ## Operation of a data mule
-The below schematic shows the target state operation. In the prototype, we did not achieve full functionality of the system, mainly due to reliability concerns. However, [Mission Mule](http://missionmule.com), a company that picked up this project, has made the full version a reality.
+The below schematic shows the target state operation.
 
 ![Schematic showing target system operation](/img/big_flow_chart_v2.png)
 
